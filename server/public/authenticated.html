@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Authenticated</title>
+  </head>
+  <body>
+    <span id="message">Authenticated, please wait...</span>
+
+    <script>
+      const urlSearchParams = new URLSearchParams(window.location.search)
+      const state = urlSearchParams.get('state')
+      const pageId = state ? JSON.parse(state || '{}').pageId : null
+      const error = urlSearchParams.get('error')
+      if (error) {
+        const messageElement = window.document.getElementById('message')
+        if (messageElement) {
+          messageElement.innerText = `Authentication failed: ${error}`
+        }
+      } else {
+        const code = urlSearchParams.get('code')
+        if (pageId && code) {
+          window.opener.postMessage(
+            {
+              type: 'GOOGLE_DOCS_SYNC_SIGN_IN_SET_CODE',
+              pageId,
+              code,
+            },
+            '*'
+          )
+        }
+      }
+    </script>
+  </body>
+</html>
