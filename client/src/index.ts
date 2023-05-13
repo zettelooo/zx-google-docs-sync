@@ -1,7 +1,12 @@
 import { WindowWithExtensionFunction } from '@zettelyay/extension-api'
 import { ExtensionScope } from '@zettelyay/models'
 import { PageExtensionData } from '../../shared/PageExtensionData'
+import { provideSignIn } from './provideSignIn'
+import { registerActivator } from './registerActivator'
+import { registerQuickAction } from './registerQuickAction'
+import { registerTipMessage } from './registerTipMessage'
 import { watchPageExtensionData } from './watchPageExtensionData'
+import { provideActivate } from './provideActivate'
 
 void ((window as WindowWithExtensionFunction).extensionFunction = function (api) {
   this.while('activated', function ({ activatedApi }) {
@@ -10,71 +15,18 @@ void ((window as WindowWithExtensionFunction).extensionFunction = function (api)
         if (!this.scopes.includes(ExtensionScope.Page)) return
 
         const applyPageExtensionData = (): void => {
-          quickActionRegistration.reference.current?.update({
-            disabled: false,
-            switchChecked: Boolean(pageExtensionDataRef.current?.enabled),
-          })
-          tipMessageRegistration.reference.current?.update({
-            initialState: pageExtensionDataRef.current,
-            hidden: !pageExtensionDataRef.current,
-          })
+          if (pageExtensionDataRef.current?.enabled) {
+            setPageExtensionData(undefined)
+            activate(pageExtensionDataRef.current.command) // TODO: Replace it with signIn() and await here and make that count for this extension's activation somehow
+            return
+          }
+          activateActivator()
+          initializeQuickAction(Boolean(pageExtensionDataRef.current?.signedInEmail))
+          updateTipMessage(pageExtensionDataRef.current)
         }
         const { pageExtensionDataRef } = watchPageExtensionData.bind(this)({ api }, applyPageExtensionData)
 
-        const quickActionRegistration = this.register(
-          pagePanelRenderedApi.registry.quickAction(() => ({
-            title: 'My extension',
-            description: 'My extension description',
-            avatarUrl: api.extensionHeader.avatar.file
-              ? api.getFileUrl(api.extensionHeader.avatar.file)
-              : api.extensionHeader.avatar.dataUrl,
-            disabled: true,
-            switchChecked: false,
-            async onClick() {
-              activatedApi.access.showMessage('My extension', 'This is a message from my extension!', {
-                variant: 'success',
-              })
-            },
-            async onToggleSwitch(checked) {
-              quickActionRegistration.reference.current?.update({
-                disabled: true,
-              })
-              await setPageExtensionData(checked ? { enabled: true } : undefined)
-              quickActionRegistration.reference.current?.update({
-                disabled: false,
-              })
-            },
-          }))
-        )
-
-        const loadingIndicatorRegistration = this.register(
-          pagePanelRenderedApi.registry.loadingIndicator(() => `Updating ${api.extensionHeader.name} status...`),
-          { initiallyInactive: true }
-        )
-
-        const tipMessageRegistration = this.register(
-          pagePanelRenderedApi.registry.message<PageExtensionData>(() => ({
-            initialState: undefined,
-            render: ({ renderContext, un }) => ({
-              encapsulated: true,
-              html: !renderContext.state
-                ? '<p>Loading...</p>'
-                : `
-<div>
-  <p style="display: flex; align-items: center; gap: 10px;">
-    <img src="${api.getFileUrl('idea.png')}" alt="tip" />
-    This is a tip about my extension!
-  </p>
-  <p>
-    This will show up when the extension is enabled on the page.
-  </p>
-</div>
-`,
-            }),
-            variant: 'information',
-            hidden: true,
-          }))
-        )
+        applyPageExtensionData() //todo: put it after all the needed registrations
 
         async function setPageExtensionData(newPageExtensionData: PageExtensionData): Promise<void> {
           try {
@@ -89,6 +41,36 @@ void ((window as WindowWithExtensionFunction).extensionFunction = function (api)
             loadingIndicatorRegistration.deactivate()
           }
         }
+
+        const { signIn } = provideSignIn.bind(this)(
+          { api, activatedApi, pagePanelRenderedApi },
+          {
+            onRequestStart() {
+              setQuickActionDisabled(true)
+              loadingIndicatorRegistration.activate()
+            },
+            onRequestEnd() {
+              setQuickActionDisabled(false)
+              loadingIndicatorRegistration.deactivate()
+            },
+          }
+        )
+
+        const { activate } = provideActivate({ signIn })
+
+        const { activateActivator } = registerActivator.bind(this)({ pagePanelRenderedApi }, { activate })
+
+        const { initializeQuickAction, setQuickActionDisabled } = registerQuickAction.bind(this)(
+          { api, pagePanelRenderedApi },
+          { setPageExtensionData, signIn }
+        )
+
+        const loadingIndicatorRegistration = this.register(
+          pagePanelRenderedApi.registry.loadingIndicator(() => 'Initializing synchronization...'),
+          { initiallyInactive: true }
+        )
+
+        const { updateTipMessage } = registerTipMessage.bind(this)({ api, pagePanelRenderedApi })
       })
     })
   })

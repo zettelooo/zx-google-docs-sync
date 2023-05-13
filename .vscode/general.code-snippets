@@ -1,0 +1,32 @@
+{
+  "This should be removed before committing": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "tbr",
+    "body": "//!To be removed$0",
+    "description": "Add a comment to remind you remove this line before committing"
+  },
+  "This file's name": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "fn",
+    "body": "$TM_FILENAME_BASE",
+    "description": "Insert's the name of this file"
+  },
+  "Console debug just log": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "lg",
+    "body": "console.log($0) //!Delete it",
+    "description": "Log something to the console"
+  },
+  "Console debug an expression": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "see",
+    "body": "console.log(...[...[${1:${CLIPBOARD:expession}}].reverse(), '$1 ='].reverse()) //!Delete it$0",
+    "description": "Log the evaluation of some expression/variable into the console"
+  },
+  "Console debug an expression formatted in JSON": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "seejson",
+    "body": "console.log(...[...[${1:${CLIPBOARD:expession}}].reverse().map(x => JSON.stringify(x, null, 2)), '$1 ≡'].reverse()) //!Delete it$0",
+    "description": "Log the evaluation of some expression/variable into the console, formatted in JSON"
+  }
+}

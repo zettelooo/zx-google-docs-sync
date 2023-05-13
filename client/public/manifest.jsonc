@@ -1,17 +1,13 @@
-// This file contains metadata of your extension.
-// Upload, test, manage, and publish your extension via Zettel developer console at https://app.zettel.ooo/developer
-
 {
   "$schema": "../node_modules/@zettelyay/extension-api/dist/manifest-json-schema.json",
 
-  "appId": "your-extension-id", // Identifier of your extension, must be unique within all your extensions.
-  "version": "0.0.0", // Very important. Update it so that the client is updated to the latest extension release.
-  "name": "Your extension name", // Display name of your extension in the Zettel app store.
-  "description": "Your extension description", // Description of your extension in the Zettel app store.
+  "appId": "google-docs-sync",
+  "version": "3.10.8",
+  "name": "Google Docs Sync",
+  "description": "Synchronize to Google Docs",
   "avatar": {
-    "file": "extension.png" // Icon of your extension in the Zettel app store. The file is to be placed in the public folder.
-    // "dataUrl": ""  // Or, put the icon's image data URL instead.
+    "file": "google-docs.png"
   },
-  "documentationMarkdownFile": "documents.md", // Optional. The file is to be placed in the public folder.
-  "scopes": ["PAGE"] // Don't touch!
+  "documentationMarkdownFile": "documents.md",
+  "scopes": ["PAGE"]
 }
