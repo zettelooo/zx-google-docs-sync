@@ -1,12 +1,12 @@
 import { ZettelServices } from '@zettelyay/api-server'
-import { EXTENSION_ACCESS_KEY } from './constants'
 import { synchronizeToGoogleDocs } from './synchronizeToGoogleDocs'
 import { PageExtensionData } from '../../shared/PageExtensionData'
+import { ZETTEL_EXTENSION_ACCESS_KEY, ZETTEL_TARGET_ENVIRONMENT } from '../../shared/constants'
 
 export function connectWsApi(): void {
   const connection = new ZettelServices.Extension.Ws.GetUpdates({
-    extensionWsApiBaseUrl: undefined,
-    extensionAccessKey: EXTENSION_ACCESS_KEY,
+    extensionWsApi: { targetEnvironment: ZETTEL_TARGET_ENVIRONMENT },
+    extensionAccessKey: ZETTEL_EXTENSION_ACCESS_KEY,
     startInitially: true,
     retryConnectionTimeoutMilliseconds: 10 * 1000,
     onStatusChange: status => {},

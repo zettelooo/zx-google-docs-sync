@@ -1,7 +1,7 @@
 import { ZettelServices } from '@zettelyay/api-server'
-import { EXTENSION_ACCESS_KEY } from './constants'
+import { ZETTEL_EXTENSION_ACCESS_KEY, ZETTEL_TARGET_ENVIRONMENT } from '../../shared/constants'
 
 export const restApiClient = new ZettelServices.Extension.Rest({
-  extensionRestApiBaseUrl: undefined,
-  extensionAccessKey: EXTENSION_ACCESS_KEY,
+  extensionRestApi: { targetEnvironment: ZETTEL_TARGET_ENVIRONMENT },
+  extensionAccessKey: ZETTEL_EXTENSION_ACCESS_KEY,
 })
