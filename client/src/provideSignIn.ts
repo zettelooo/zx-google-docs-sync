@@ -30,7 +30,9 @@ export const provideSignIn: ExtensionHelperFunction<
 
   async function initiateSignIn(): Promise<void> {
     try {
-      const response = await fetch(`${SERVER_BASE_URL}/sign-in-page-url?pid=${pagePanelRenderedApi.target.pageId}`)
+      const url = new URL(`${SERVER_BASE_URL}/sign-in-page-url`)
+      url.searchParams.set('pid', pagePanelRenderedApi.target.pageId)
+      const response = await fetch(url.href)
       const { signInUrl } = await response.json()
       if (signInUrl) {
         window.open(signInUrl, 'Sign-in', 'width=600,height=850')

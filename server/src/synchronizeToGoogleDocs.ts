@@ -5,8 +5,6 @@ import { createOAuth2Client } from './createOAuth2Client'
 import { handleApiCallConnectionReset } from './handleApiCallConnectionReset'
 import { PageExtensionData } from '../../shared/PageExtensionData'
 import { PageCredentialsStorage } from './PageCredentialsStorage'
-import { ZettelServices } from '@zettelyay/api-server'
-import { EXTENSION_ACCESS_KEY } from './constants'
 import { restApiClient } from './restApiClient'
 
 type Page = ZettelTypes.Service.Extension.PageEntityForExtension<PageExtensionData>

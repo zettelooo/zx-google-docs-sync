@@ -5,8 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "upgrade": "zettel-ebt upgrade",
-    "dev": "ts-node-dev --require dotenv/config dotenv_config_path=../.env --files src/index.ts",
-    "start": "ts-node --require dotenv/config dotenv_config_path=../.env --files src/index.ts"
+    "dev": "ts-node-dev --require dotenv/config --files src/index.ts dotenv_config_path=../.env",
+    "start": "ts-node --require dotenv/config --files src/index.t dotenv_config_path=../.envs"
   },
   "dependencies": {
     "@googleapis/docs": "^2.0.1",

@@ -26,8 +26,6 @@ void ((window as WindowWithExtensionFunction).extensionFunction = function (api)
         }
         const { pageExtensionDataRef } = watchPageExtensionData.bind(this)({ api }, applyPageExtensionData)
 
-        applyPageExtensionData() //todo: put it after all the needed registrations
-
         async function setPageExtensionData(newPageExtensionData: PageExtensionData): Promise<void> {
           try {
             loadingIndicatorRegistration.activate()
@@ -71,6 +69,8 @@ void ((window as WindowWithExtensionFunction).extensionFunction = function (api)
         )
 
         const { updateTipMessage } = registerTipMessage.bind(this)({ api, pagePanelRenderedApi })
+
+        applyPageExtensionData()
       })
     })
   })
