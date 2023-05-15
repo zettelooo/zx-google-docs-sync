@@ -1,7 +1,7 @@
 {
-  "name": "zettel-extension-seed-client",
+  "name": "extension-google-docs-sync-client",
   "version": "0.0.0",
-  "description": "ZettelExtension Seed - Client-side Extension",
+  "description": "Zettel Extension - Google Docs Sync - Client-side Extension",
   "main": "src/index.ts",
   "scripts": {
     "upgrade": "zettel-ebt upgrade",
@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "@zettelyay/extension-build-tools": "^1.0.5",
-    "cross-env": "^7.0.3",
     "dotenv-webpack": "^8.0.1",
     "rimraf": "^5.0.0",
     "ts-loader": "^9.4.2",
@@ -27,12 +26,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zettelyay/zettel-extension-seed"
+    "url": "https://github.com/zettelyay/extension-google-docs-sync"
   },
   "keywords": [
     "zettel",
     "extension",
-    "client"
+    "client",
+    "google",
+    "docs",
+    "sync"
   ],
   "author": {
     "name": "Zettel",
@@ -43,7 +45,7 @@
   ],
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zettelyay/zettel-extension-seed/issues"
+    "url": "https://github.com/zettelyay/extension-google-docs-sync/issues"
   },
-  "homepage": "https://github.com/zettelyay/zettel-extension-seed/blob/master/README.md"
+  "homepage": "https://github.com/zettelyay/extension-google-docs-sync/blob/master/README.md"
 }

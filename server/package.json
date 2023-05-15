@@ -1,7 +1,7 @@
 {
-  "name": "zettel-extension-seed-server",
+  "name": "extension-google-docs-sync-server",
   "version": "0.0.0",
-  "description": "Zettel Extension Seed - Server-side API",
+  "description": "Zettel Extension - Google Docs Sync - Server-side API",
   "main": "src/index.ts",
   "scripts": {
     "upgrade": "zettel-ebt upgrade",
@@ -31,11 +31,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zettelyay/zettel-extension-seed"
+    "url": "https://github.com/zettelyay/extension-google-docs-sync"
   },
   "keywords": [
     "zettel",
-    "extension"
+    "extension",
+    "server",
+    "google",
+    "docs",
+    "sync"
   ],
   "author": {
     "name": "Zettel",
@@ -43,7 +47,7 @@
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zettelyay/zettel-extension-seed/issues"
+    "url": "https://github.com/zettelyay/extension-google-docs-sync/issues"
   },
-  "homepage": "https://github.com/zettelyay/zettel-extension-seed/blob/master/README.md"
+  "homepage": "https://github.com/zettelyay/extension-google-docs-sync/blob/master/README.md"
 }
