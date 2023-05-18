@@ -1,4 +1,4 @@
-import { ExtensionHelperFunction } from '@zettelyay/extension-api'
+import { ExtensionHelperFunction } from '@zettelooo/extension-api'
 import { SERVER_BASE_URL } from '../../shared/constants'
 
 export const provideSignIn: ExtensionHelperFunction<

@@ -1,5 +1,5 @@
-import { WindowWithExtensionFunction } from '@zettelyay/extension-api'
-import { ExtensionScope } from '@zettelyay/models'
+import { WindowWithExtensionFunction } from '@zettelooo/extension-api'
+import { ExtensionScope } from '@zettelooo/models'
 import { PageExtensionData } from '../../shared/PageExtensionData'
 import { provideSignIn } from './provideSignIn'
 import { registerActivator } from './registerActivator'

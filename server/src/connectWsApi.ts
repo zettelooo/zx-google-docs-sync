@@ -1,4 +1,4 @@
-import { ZettelServices } from '@zettelyay/api-server'
+import { ZettelServices } from '@zettelooo/api-server'
 import { synchronizeToGoogleDocs } from './synchronizeToGoogleDocs'
 import { PageExtensionData } from '../../shared/PageExtensionData'
 import { ZETTEL_EXTENSION_ACCESS_KEY, ZETTEL_TARGET_ENVIRONMENT } from '../../shared/constants'

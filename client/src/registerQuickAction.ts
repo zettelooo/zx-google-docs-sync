@@ -1,4 +1,4 @@
-import { ExtensionHelperFunction, ExtensionLifeSpans } from '@zettelyay/extension-api'
+import { ExtensionHelperFunction, ExtensionLifeSpans } from '@zettelooo/extension-api'
 import { PageExtensionData } from '../../shared/PageExtensionData'
 
 export const registerQuickAction: ExtensionHelperFunction<

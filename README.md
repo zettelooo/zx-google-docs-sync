@@ -1,6 +1,8 @@
-# Zettel Extension Seed
+# Zettel Extension - Google Docs Sync
 
-This is a seed project to speed-up developing extensions for [Zettel](https://app.zettel.ooo). You can read more about the platform [here](http://zettel.ooo).
+With this extension you authenticate the Zettel app to your Google account and all your cards will actively be synchronized to a Google Docs document.
+
+It is created out of the [Zettel Extension Seed](https://github.com/zettelooo/zettel-extension-seed) project template.
 
 The repository consists of two projects:
 
@@ -8,10 +10,10 @@ The repository consists of two projects:
 
    Here are the scripts to support that:
 
-   - To upgrade the Zettel official dependencies to their newest versions in order to access the latest API end-points and data models:
+   - To update the Zettel official dependencies to their newest versions in order to access the latest API end-points and data models:
 
      ```sh
-     client$ npm run upgrade
+     client$ npm run update
      ```
 
    - To upgrade the extension version in `public/manifest.jsonc` file:
@@ -32,10 +34,10 @@ The repository consists of two projects:
 
    Here are the scripts to support that:
 
-   - To upgrade the Zettel official dependencies to their newest versions in order to access the latest API end-points and data models:
+   - To update the Zettel official dependencies to their newest versions in order to access the latest API end-points and data models:
 
      ```sh
-     server$ npm run upgrade
+     server$ npm run update
      ```
 
    - To start the server:
@@ -44,7 +46,5 @@ The repository consists of two projects:
      server$ npm start     # For production
      ```
      > **Note:** You can specify on what port it will serve your API by prepending `PORT=4000` to the commands above, by default it uses the port `4000`.
-
-Both projects are filled with some dummy implementations to show-case how to setup things, feel free to modify it, or even start your own projects following the prctices used in this seed project.
 
 For more information, please [contact the development](mailto:ahs502@gmail.com) team.

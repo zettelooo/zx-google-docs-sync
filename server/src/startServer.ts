@@ -53,7 +53,7 @@ export function startServer(): void {
       const {
         pages: [page],
       } = await restApiClient.getPages({
-        ids: [pageId],
+        pageIds: [pageId],
         withExtensionInstalled: true,
       })
       if (!page) {

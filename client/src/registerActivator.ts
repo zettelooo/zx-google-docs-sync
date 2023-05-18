@@ -1,4 +1,4 @@
-import { ExtensionHelperFunction } from '@zettelyay/extension-api'
+import { ExtensionHelperFunction } from '@zettelooo/extension-api'
 
 export const registerActivator: ExtensionHelperFunction<
   'pagePanelRendered',
