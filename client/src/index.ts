@@ -44,11 +44,11 @@ void ((window as WindowWithExtensionFunction).extensionFunction = function (api)
           { api, activatedApi, pagePanelRenderedApi },
           {
             onRequestStart() {
-              setQuickActionDisabled(true)
+              // setQuickActionDisabled(true)
               loadingIndicatorRegistration.activate()
             },
             onRequestEnd() {
-              setQuickActionDisabled(false)
+              // setQuickActionDisabled(false)
               loadingIndicatorRegistration.deactivate()
             },
           }

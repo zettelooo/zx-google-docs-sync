@@ -26,18 +26,14 @@ export const registerQuickAction: ExtensionHelperFunction<
       disabled: true,
       switchChecked: false,
       async onClick() {
-        quickActionRegistration.reference.current?.update({ disabled: true })
         await signIn()
-        quickActionRegistration.reference.current?.update({ disabled: false })
       },
       async onToggleSwitch(checked) {
-        quickActionRegistration.reference.current?.update({ disabled: true })
         if (!checked) {
           await setPageExtensionData(undefined)
         } else {
           await signIn()
         }
-        quickActionRegistration.reference.current?.update({ disabled: false })
       },
     }))
   )
