@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@zettelooo/extension-api/dist/manifest-json-schema.json",
 
   "appId": "google-docs-sync",
-  "version": "3.12.3",
+  "version": "3.12.7",
   "name": "Google Docs Sync",
   "description": "Synchronize to Google Docs",
   "aiDescription": "Backs up all cards in the list to a Google doc. It synchronizes the list to a Google doc in real time.",
