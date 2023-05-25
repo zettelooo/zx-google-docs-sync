@@ -1,9 +1,9 @@
-import { ExtensionHelperFunction } from '@zettelooo/extension-api'
+import { ZettelExtensions } from '@zettelooo/extension-api'
 import { SERVER_BASE_URL } from '../../shared/constants'
 
-export const provideSignIn: ExtensionHelperFunction<
-  'pagePanelRendered',
-  'api' | 'activated' | 'pagePanelRendered',
+export const provideSignIn: ZettelExtensions.Helper<
+  'pagePanel',
+  'api' | 'activated' | 'pagePanel',
   [
     {
       onRequestStart: () => void
@@ -13,7 +13,7 @@ export const provideSignIn: ExtensionHelperFunction<
   {
     signIn: () => Promise<void>
   }
-> = function ({ api, activatedApi, pagePanelRenderedApi }, { onRequestStart, onRequestEnd }) {
+> = function ({ api, activatedApi, pagePanelApi }, { onRequestStart, onRequestEnd }) {
   let signInPromise:
     | {
         readonly resolve: () => void
@@ -31,7 +31,7 @@ export const provideSignIn: ExtensionHelperFunction<
   async function initiateSignIn(): Promise<void> {
     try {
       const url = new URL(`${SERVER_BASE_URL}/sign-in-page-url`)
-      url.searchParams.set('pid', pagePanelRenderedApi.target.pageId)
+      url.searchParams.set('pid', pagePanelApi.target.pageId)
       const response = await fetch(url.href)
       const { signInUrl } = await response.json()
       if (signInUrl) {
@@ -51,7 +51,7 @@ export const provideSignIn: ExtensionHelperFunction<
         const sourceWindow = event.source as WindowProxy | null
         sourceWindow?.close()
         if (
-          event.data.pageId === pagePanelRenderedApi.target.pageId &&
+          event.data.pageId === pagePanelApi.target.pageId &&
           event.data.code &&
           typeof event.data.code === 'string'
         ) {
@@ -71,7 +71,7 @@ export const provideSignIn: ExtensionHelperFunction<
             signInPromise?.resolve()
           } catch (error) {
             console.error(error)
-            activatedApi.access.showMessage(api.extensionHeader.name, 'Failed to activate, please try again.', {
+            activatedApi.access.showMessage(api.header.name, 'Failed to activate, please try again.', {
               variant: 'error',
             })
             signInPromise?.reject()

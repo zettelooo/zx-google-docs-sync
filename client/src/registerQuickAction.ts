@@ -1,9 +1,9 @@
-import { ExtensionHelperFunction, ExtensionLifeSpans } from '@zettelooo/extension-api'
+import { ZettelExtensions } from '@zettelooo/extension-api'
 import { PageExtensionData } from '../../shared/PageExtensionData'
 
-export const registerQuickAction: ExtensionHelperFunction<
-  'pagePanelRendered',
-  'api' | 'pagePanelRendered',
+export const registerQuickAction: ZettelExtensions.Helper<
+  'pagePanel',
+  'api' | 'pagePanel',
   [
     {
       setPageExtensionData: (pageExtensionData: PageExtensionData) => Promise<void>
@@ -14,15 +14,12 @@ export const registerQuickAction: ExtensionHelperFunction<
     initializeQuickAction: (switchChecked: boolean) => void
     setQuickActionDisabled: (disabled: boolean) => void
   }
-> = function ({ api, pagePanelRenderedApi }, { setPageExtensionData, signIn }) {
+> = function ({ api, pagePanelApi }, { setPageExtensionData, signIn }) {
   const quickActionRegistration = this.register(
-    pagePanelRenderedApi.registry.quickAction(() => ({
-      title: api.extensionHeader.name,
-      description: api.extensionHeader.description,
-      avatarUrl: api.extensionHeader.avatar.file
-        ? api.getFileUrl(api.extensionHeader.avatar.file)
-        : api.extensionHeader.avatar.dataUrl,
-      category: ExtensionLifeSpans.PagePanelRendered.QuickAction.Category.Productivity,
+    pagePanelApi.registry.quickAction(() => ({
+      title: api.header.name,
+      description: api.header.description,
+      avatarUrl: api.header.avatar.file ? api.getFileUrl(api.header.avatar.file) : api.header.avatar.dataUrl,
       disabled: true,
       switchChecked: false,
       async onClick() {

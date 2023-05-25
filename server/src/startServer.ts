@@ -1,13 +1,13 @@
 import cors from 'cors'
 import express from 'express'
-import path from 'path'
 import morgan from 'morgan'
+import path from 'path'
+import { PageExtensionData } from '../../shared/PageExtensionData'
+import { SERVER_BASE_URL } from '../../shared/constants'
+import { PageCredentialsStorage } from './PageCredentialsStorage'
 import { createOAuth2Client } from './createOAuth2Client'
 import { handleApiCallConnectionReset } from './handleApiCallConnectionReset'
-import { SERVER_BASE_URL } from '../../shared/constants'
 import { restApiClient } from './restApiClient'
-import { PageCredentialsStorage } from './PageCredentialsStorage'
-import { PageExtensionData } from '../../shared/PageExtensionData'
 
 export function startServer(): void {
   const port = Number(process.env.PORT || 4000)

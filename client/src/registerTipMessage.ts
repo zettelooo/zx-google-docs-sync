@@ -1,16 +1,16 @@
-import { ExtensionHelperFunction } from '@zettelooo/extension-api'
+import { ZettelExtensions } from '@zettelooo/extension-api'
 import { PageExtensionData } from '../../shared/PageExtensionData'
 
-export const registerTipMessage: ExtensionHelperFunction<
-  'pagePanelRendered',
-  'api' | 'pagePanelRendered',
+export const registerTipMessage: ZettelExtensions.Helper<
+  'pagePanel',
+  'api' | 'pagePanel',
   [],
   {
     updateTipMessage: (pageExtensionData: PageExtensionData.Activated | undefined) => void
   }
-> = function ({ api, pagePanelRenderedApi }) {
+> = function ({ api, pagePanelApi }) {
   const tipMessageRegistration = this.register(
-    pagePanelRenderedApi.registry.message<PageExtensionData.Activated | undefined>(() => ({
+    pagePanelApi.registry.message<PageExtensionData.Activated | undefined>(() => ({
       initialState: undefined,
       render: ({ renderContext }) => {
         if (!renderContext.state) return { encapsulated: true, html: '<p>Please wait...</p>' }

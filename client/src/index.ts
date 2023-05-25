@@ -1,36 +1,34 @@
-import { WindowWithExtensionFunction } from '@zettelooo/extension-api'
-import { ExtensionScope } from '@zettelooo/models'
+import { ZettelExtensions } from '@zettelooo/extension-api'
 import { PageExtensionData } from '../../shared/PageExtensionData'
+import { provideActivate } from './provideActivate'
 import { provideSignIn } from './provideSignIn'
-import { registerActivator } from './registerActivator'
 import { registerQuickAction } from './registerQuickAction'
 import { registerTipMessage } from './registerTipMessage'
-import { watchPageExtensionData } from './watchPageExtensionData'
-import { provideActivate } from './provideActivate'
 
-void ((window as WindowWithExtensionFunction).extensionFunction = function (api) {
+void ((window as ZettelExtensions.WindowWithStarter).$starter = function (api) {
   this.while('activated', function ({ activatedApi }) {
     this.while('signedIn', function ({ signedInApi }) {
-      this.while('pagePanelRendered', function ({ pagePanelRenderedApi }) {
-        if (!this.scopes.includes(ExtensionScope.Page)) return
+      this.while('pagePanel', function ({ pagePanelApi }) {
+        if (!this.scopes.includes(ZettelExtensions.Scope.Page)) return
 
         const applyPageExtensionData = (): void => {
-          if (pageExtensionDataRef.current?.enabled) {
+          const pageExtensionData = this.data.page.extensionData as PageExtensionData
+          if (pageExtensionData?.enabled) {
             setPageExtensionData(undefined)
-            activate(pageExtensionDataRef.current.command) // TODO: Replace it with signIn() and await here and make that count for this extension's activation somehow
+            activate(pageExtensionData.command) // TODO: Replace it with signIn() and await here and make that count for this extension's activation somehow
             return
           }
-          activateActivator()
-          initializeQuickAction(Boolean(pageExtensionDataRef.current?.signedInEmail))
-          updateTipMessage(pageExtensionDataRef.current)
+          initializeQuickAction(Boolean(pageExtensionData?.signedInEmail))
+          updateTipMessage(pageExtensionData)
         }
-        const { pageExtensionDataRef } = watchPageExtensionData.bind(this)({ api }, applyPageExtensionData)
+
+        this.register(pagePanelApi.watch(data => data.page.extensionData as PageExtensionData, applyPageExtensionData))
 
         async function setPageExtensionData(newPageExtensionData: PageExtensionData): Promise<void> {
           try {
             loadingIndicatorRegistration.activate()
             await signedInApi.access.setPageExtensionData<PageExtensionData>(
-              pagePanelRenderedApi.target.pageId,
+              pagePanelApi.target.pageId,
               newPageExtensionData
             )
           } catch {
@@ -41,7 +39,7 @@ void ((window as WindowWithExtensionFunction).extensionFunction = function (api)
         }
 
         const { signIn } = provideSignIn.bind(this)(
-          { api, activatedApi, pagePanelRenderedApi },
+          { api, activatedApi, pagePanelApi },
           {
             onRequestStart() {
               // setQuickActionDisabled(true)
@@ -56,19 +54,17 @@ void ((window as WindowWithExtensionFunction).extensionFunction = function (api)
 
         const { activate } = provideActivate({ signIn })
 
-        const { activateActivator } = registerActivator.bind(this)({ pagePanelRenderedApi }, { activate })
-
         const { initializeQuickAction, setQuickActionDisabled } = registerQuickAction.bind(this)(
-          { api, pagePanelRenderedApi },
+          { api, pagePanelApi },
           { setPageExtensionData, signIn }
         )
 
         const loadingIndicatorRegistration = this.register(
-          pagePanelRenderedApi.registry.loadingIndicator(() => 'Initializing synchronization...'),
+          pagePanelApi.registry.loadingIndicator(() => 'Initializing synchronization...'),
           { initiallyInactive: true }
         )
 
-        const { updateTipMessage } = registerTipMessage.bind(this)({ api, pagePanelRenderedApi })
+        const { updateTipMessage } = registerTipMessage.bind(this)({ api, pagePanelApi })
 
         applyPageExtensionData()
       })

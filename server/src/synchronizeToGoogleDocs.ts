@@ -1,13 +1,13 @@
 import { docs, docs_v1, GaxiosPromise } from '@googleapis/docs'
 import { ZettelTypes } from '@zettelooo/api-types'
 import { Id, PartialRecord } from '@zettelooo/commons'
+import { PageExtensionData } from '../../shared/PageExtensionData'
 import { createOAuth2Client } from './createOAuth2Client'
 import { handleApiCallConnectionReset } from './handleApiCallConnectionReset'
-import { PageExtensionData } from '../../shared/PageExtensionData'
 import { PageCredentialsStorage } from './PageCredentialsStorage'
 import { restApiClient } from './restApiClient'
 
-type Page = ZettelTypes.Service.Extension.PageEntityForExtension<PageExtensionData>
+type Page = ZettelTypes.Extension.Entity.Page<PageExtensionData>
 
 const { documents } = docs('v1')
 const pageSynchronizationQueues: PartialRecord<Id, Page> = {}
@@ -127,7 +127,7 @@ export async function synchronizeToGoogleDocs(page: Page): Promise<void> {
             const blockStartIndex = currentIndex
             switch (block.type) {
               case ZettelTypes.Model.Block.Type.Paragraph:
-                pushStyledText(block.styledText)
+                pushStyledText(block)
                 requests.push({
                   deleteParagraphBullets: {
                     range: { startIndex: blockStartIndex, endIndex: currentIndex },
@@ -145,7 +145,7 @@ export async function synchronizeToGoogleDocs(page: Page): Promise<void> {
                 break
 
               case ZettelTypes.Model.Block.Type.Header:
-                pushStyledText(block.styledText)
+                pushStyledText(block)
                 requests.push({
                   deleteParagraphBullets: {
                     range: { startIndex: blockStartIndex, endIndex: currentIndex },
@@ -176,7 +176,7 @@ export async function synchronizeToGoogleDocs(page: Page): Promise<void> {
                 break
 
               case ZettelTypes.Model.Block.Type.Quote:
-                pushStyledText(block.styledText, 1)
+                pushStyledText(block, 1)
                 requests.push({
                   deleteParagraphBullets: {
                     range: { startIndex: blockStartIndex, endIndex: currentIndex },
@@ -258,7 +258,7 @@ export async function synchronizeToGoogleDocs(page: Page): Promise<void> {
                 break
 
               case ZettelTypes.Model.Block.Type.ListItem:
-                pushStyledText(block.styledText)
+                pushStyledText(block)
                 requests.push({
                   deleteParagraphBullets: {
                     range: { startIndex: blockStartIndex, endIndex: currentIndex },
@@ -282,7 +282,7 @@ export async function synchronizeToGoogleDocs(page: Page): Promise<void> {
                 break
 
               case ZettelTypes.Model.Block.Type.Task:
-                pushStyledText(block.styledText)
+                pushStyledText(block)
                 requests.push({
                   deleteParagraphBullets: {
                     range: { startIndex: blockStartIndex, endIndex: currentIndex },
