@@ -1,8 +1,5 @@
 {
   "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": true
-  },
   "editor.suggest.snippetsPreventQuickSuggestions": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {

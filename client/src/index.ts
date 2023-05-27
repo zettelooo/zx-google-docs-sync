@@ -11,19 +11,6 @@ void ((window as ZettelExtensions.WindowWithStarter).$starter = function (api) {
       this.while('pagePanel', function ({ pagePanelApi }) {
         if (!this.scopes.includes(ZettelExtensions.Scope.Page)) return
 
-        const applyPageExtensionData = (): void => {
-          const pageExtensionData = this.data.page.extensionData as PageExtensionData
-          if (pageExtensionData?.enabled) {
-            setPageExtensionData(undefined)
-            activate(pageExtensionData.command) // TODO: Replace it with signIn() and await here and make that count for this extension's activation somehow
-            return
-          }
-          initializeQuickAction(Boolean(pageExtensionData?.signedInEmail))
-          updateTipMessage(pageExtensionData)
-        }
-
-        this.register(pagePanelApi.watch(data => data.page.extensionData as PageExtensionData, applyPageExtensionData))
-
         async function setPageExtensionData(newPageExtensionData: PageExtensionData): Promise<void> {
           try {
             loadingIndicatorRegistration.activate()
@@ -66,7 +53,23 @@ void ((window as ZettelExtensions.WindowWithStarter).$starter = function (api) {
 
         const { updateTipMessage } = registerTipMessage.bind(this)({ api, pagePanelApi })
 
-        applyPageExtensionData()
+        this.register(
+          pagePanelApi.watch(
+            data => data.page.extensionData as PageExtensionData,
+            (newValue, oldValue?) => {
+              if (newValue?.enabled) {
+                setPageExtensionData(undefined)
+                activate(newValue.command) // TODO: Replace it with signIn() and await here and make that count for this extension's activation somehow
+                return
+              }
+              initializeQuickAction(Boolean(newValue?.signedInEmail))
+              updateTipMessage(newValue)
+            },
+            {
+              initialCallback: true,
+            }
+          )
+        )
       })
     })
   })
