@@ -33,7 +33,7 @@ export const registerTipMessage: ZettelExtensions.Helper<
 
 <div>
   <p class="idea-container">
-    <img src="${api.getFileUrl('idea.png')}" alt="tip" />
+    <img src="${api.getFileUrl({ filePath: 'idea.png' })}" alt="tip" />
     All the cards of this page will be automatically synchronized into Google Docs.
   </p>
   <div class="field">User email: <strong>${renderContext.state.signedInEmail}</strong></div>

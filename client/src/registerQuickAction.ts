@@ -19,7 +19,7 @@ export const registerQuickAction: ZettelExtensions.Helper<
     pagePanelApi.registry.quickAction(() => ({
       title: api.header.name,
       description: api.header.description,
-      avatarUrl: api.header.avatar.file ? api.getFileUrl(api.header.avatar.file) : api.header.avatar.dataUrl,
+      avatarUrl: api.header.avatarUrl,
       disabled: true,
       switchChecked: false,
       async onClick() {
