@@ -1,5 +1,5 @@
 import { ZettelExtensions } from '@zettelooo/extension-api'
-import { SERVER_BASE_URL } from '../../shared/constants'
+import { SERVER_BASE_URL } from './constants'
 
 export const provideSignIn: ZettelExtensions.Helper<
   'pagePanel',

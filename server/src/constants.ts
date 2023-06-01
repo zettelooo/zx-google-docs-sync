@@ -1,8 +1,12 @@
-import { SERVER_BASE_URL } from '../../shared/constants'
+export const ZETTEL_TARGET_ENVIRONMENT = (process.env.ZETTEL_TARGET_ENVIRONMENT || '') as 'local' | 'stage' | 'live'
+export const ZETTEL_EXTENSION_ACCESS_KEY = process.env.ZETTEL_EXTENSION_ACCESS_KEY || ''
 
-export const GOOGLE_CLOUD_CREDENTIAL_WEB_CLIENT = {
-  client_id: process.env.GOOGLE_CLOUD_CREDENTIAL_WEB_CLIENT_CLIENT_ID ?? '',
-  project_id: process.env.GOOGLE_CLOUD_CREDENTIAL_WEB_CLIENT_PROJECT_ID ?? '',
-  client_secret: process.env.GOOGLE_CLOUD_CREDENTIAL_WEB_CLIENT_CLIENT_SECRET ?? '',
-  redirect_uri: `${SERVER_BASE_URL}/static/authenticated.html`,
-} as const
+export const SERVER_BASE_URL = process.env.SERVER_BASE_URL || ''
+
+export const GOOGLE_CLOUD_CREDENTIAL_WEB_CLIENT_CLIENT_ID =
+  process.env.GOOGLE_CLOUD_CREDENTIAL_WEB_CLIENT_CLIENT_ID ?? ''
+export const GOOGLE_CLOUD_CREDENTIAL_WEB_CLIENT_PROJECT_ID =
+  process.env.GOOGLE_CLOUD_CREDENTIAL_WEB_CLIENT_PROJECT_ID ?? ''
+export const GOOGLE_CLOUD_CREDENTIAL_WEB_CLIENT_CLIENT_SECRET =
+  process.env.GOOGLE_CLOUD_CREDENTIAL_WEB_CLIENT_CLIENT_SECRET ?? ''
+export const GOOGLE_CLOUD_CREDENTIAL_WEB_CLIENT_REDIRECT_URL = `${SERVER_BASE_URL}/static/authenticated.html`

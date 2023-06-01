@@ -1,7 +1,7 @@
 import { ZettelServices } from '@zettelooo/api-server'
 import { PageExtensionData } from '../../shared/PageExtensionData'
-import { ZETTEL_EXTENSION_ACCESS_KEY, ZETTEL_TARGET_ENVIRONMENT } from '../../shared/constants'
 import { synchronizeToGoogleDocs } from './synchronizeToGoogleDocs'
+import { ZETTEL_EXTENSION_ACCESS_KEY, ZETTEL_TARGET_ENVIRONMENT } from './constants'
 
 export function connectWsApi(): void {
   const connection = new ZettelServices.Extension.Ws.GetUpdates({
