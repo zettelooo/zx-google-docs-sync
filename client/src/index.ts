@@ -1,5 +1,5 @@
 import { ZettelExtensions } from '@zettelooo/extension-api'
-import { PageExtensionData } from '../../shared/PageExtensionData'
+import { PageExtensionData } from 'shared'
 import { provideActivate } from './provideActivate'
 import { provideSignIn } from './provideSignIn'
 import { registerQuickAction } from './registerQuickAction'

@@ -4,7 +4,7 @@ With this extension you authenticate the Zettel app to your Google account and a
 
 It is created out of the [Zettel Extension Seed](https://github.com/zettelooo/zettel-extension-seed) project template.
 
-The repository consists of two projects:
+The repository consists of three projects:
 
 1. The `client` project, this is the main extension implementation which will be a part of the Web app itself.
 
@@ -51,5 +51,15 @@ The repository consists of two projects:
      server$ npm start     # For production
      ```
      > **Note:** You can specify on what port it will serve your API by prepending `PORT=4000` to the commands above, by default it uses the port `4000`.
+
+1. The `shared` project, which contains the shared implementation between the two others.
+
+   Here are the scripts to support that:
+
+   - To update the Zettel official dependencies to their newest versions in order to access the latest API end-points and data models:
+
+     ```sh
+     shared$ npm run update
+     ```
 
 For more information, please [contact the development](mailto:ahs502@gmail.com) team.

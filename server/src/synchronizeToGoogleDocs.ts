@@ -1,7 +1,7 @@
 import { docs, docs_v1, GaxiosPromise } from '@googleapis/docs'
 import { ZettelTypes } from '@zettelooo/api-types'
 import { Id, PartialRecord } from '@zettelooo/commons'
-import { PageExtensionData } from '../../shared/PageExtensionData'
+import { PageExtensionData } from 'shared'
 import { createOAuth2Client } from './createOAuth2Client'
 import { handleApiCallConnectionReset } from './handleApiCallConnectionReset'
 import { PageCredentialsStorage } from './PageCredentialsStorage'

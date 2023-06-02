@@ -2,12 +2,12 @@ import cors from 'cors'
 import express from 'express'
 import morgan from 'morgan'
 import path from 'path'
-import { PageExtensionData } from '../../shared/PageExtensionData'
+import { PageExtensionData } from 'shared'
 import { PageCredentialsStorage } from './PageCredentialsStorage'
+import { SERVER_BASE_URL } from './constants'
 import { createOAuth2Client } from './createOAuth2Client'
 import { handleApiCallConnectionReset } from './handleApiCallConnectionReset'
 import { restApiClient } from './restApiClient'
-import { SERVER_BASE_URL } from './constants'
 
 export function startServer(): void {
   const port = Number(process.env.PORT || 4000)
