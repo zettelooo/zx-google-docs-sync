@@ -1,3 +1,4 @@
+import { ZettelServices } from '@zettelooo/api-server'
 import cors from 'cors'
 import express from 'express'
 import morgan from 'morgan'
@@ -9,7 +10,7 @@ import { createOAuth2Client } from './createOAuth2Client'
 import { handleApiCallConnectionReset } from './handleApiCallConnectionReset'
 import { restApiClient } from './restApiClient'
 
-export function startServer(): void {
+export function startServer(connection: ZettelServices.Extension.Ws.GetUpdates<PageExtensionData>): void {
   const port = Number(process.env.PORT || 4000)
 
   const app = express()

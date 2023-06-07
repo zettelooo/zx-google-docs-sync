@@ -3,8 +3,8 @@ import { PageExtensionData } from 'shared'
 import { ZETTEL_EXTENSION_ACCESS_KEY, ZETTEL_TARGET_ENVIRONMENT } from './constants'
 import { synchronizeToGoogleDocs } from './synchronizeToGoogleDocs'
 
-export function connectWsApi(): void {
-  const connection = new ZettelServices.Extension.Ws.GetUpdates({
+export function connectWsApi(): ZettelServices.Extension.Ws.GetUpdates<PageExtensionData> {
+  const connection = new ZettelServices.Extension.Ws.GetUpdates<PageExtensionData>({
     extensionWsApi: { targetEnvironment: ZETTEL_TARGET_ENVIRONMENT },
     extensionAccessKey: ZETTEL_EXTENSION_ACCESS_KEY,
     startInitially: true,
@@ -38,4 +38,5 @@ export function connectWsApi(): void {
       }
     },
   })
+  return connection
 }
