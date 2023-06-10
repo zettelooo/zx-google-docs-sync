@@ -7,7 +7,8 @@ export const registerTipMessage: ZettelExtensions.Helper<
   [],
   {
     updateTipMessage: (pageExtensionData: PageExtensionData.Activated | undefined) => void
-  }
+  },
+  PageExtensionData
 > = function ({ api, pagePanelApi }) {
   const tipMessageRegistration = this.register(
     pagePanelApi.registry.message<PageExtensionData.Activated | undefined>(() => ({

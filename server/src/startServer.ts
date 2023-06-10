@@ -74,12 +74,11 @@ export function startServer(connection: ZettelServices.Extension.Ws.GetUpdates<P
         refreshToken,
         expiryTimestamp,
       })
-      const newPageExtensionData: PageExtensionData = {
-        signedInEmail,
-      }
       await restApiClient.setPageExtensionData({
         pageId,
-        data: newPageExtensionData,
+        data: {
+          signedInEmail,
+        },
       })
       res.end()
     } catch (error) {

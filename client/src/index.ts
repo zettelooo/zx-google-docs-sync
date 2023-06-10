@@ -5,19 +5,16 @@ import { provideSignIn } from './provideSignIn'
 import { registerQuickAction } from './registerQuickAction'
 import { registerTipMessage } from './registerTipMessage'
 
-void ((window as ZettelExtensions.WindowWithStarter).$starter = function (api) {
+void ((window as ZettelExtensions.WindowWithStarter<PageExtensionData>).$starter = function (api) {
   this.while('activated', function ({ activatedApi }) {
     this.while('signedIn', function ({ signedInApi }) {
       this.while('pagePanel', function ({ pagePanelApi }) {
         if (!this.scopes.includes(ZettelExtensions.Scope.Page)) return
 
-        async function setPageExtensionData(newPageExtensionData: PageExtensionData): Promise<void> {
+        async function clearPageExtensionData(): Promise<void> {
           try {
             loadingIndicatorRegistration.activate()
-            await signedInApi.access.setPageExtensionData<PageExtensionData>(
-              pagePanelApi.target.pageId,
-              newPageExtensionData
-            )
+            await signedInApi.access.setPageExtensionData(pagePanelApi.target.pageId, undefined)
           } catch {
             // Do nothing!
           } finally {
@@ -43,7 +40,7 @@ void ((window as ZettelExtensions.WindowWithStarter).$starter = function (api) {
 
         const { initializeQuickAction, setQuickActionDisabled } = registerQuickAction.bind(this)(
           { api, pagePanelApi },
-          { setPageExtensionData, signIn }
+          { clearPageExtensionData, signIn }
         )
 
         const loadingIndicatorRegistration = this.register(
@@ -55,15 +52,15 @@ void ((window as ZettelExtensions.WindowWithStarter).$starter = function (api) {
 
         this.register(
           pagePanelApi.watch(
-            data => data.page.extensionData as PageExtensionData,
-            (newValue, oldValue?) => {
-              if (newValue?.enabled) {
-                setPageExtensionData(undefined)
-                activate(newValue.command) // TODO: Replace it with signIn() and await here and make that count for this extension's activation somehow
+            data => data.page.extensionData,
+            async newPageExtensionData => {
+              if (newPageExtensionData?.enabled) {
+                await clearPageExtensionData()
+                activate(newPageExtensionData.command) // TODO: Replace it with signIn() and await here and make that count for this extension's activation somehow
                 return
               }
-              initializeQuickAction(Boolean(newValue?.signedInEmail))
-              updateTipMessage(newValue)
+              initializeQuickAction(Boolean(newPageExtensionData?.signedInEmail))
+              updateTipMessage(newPageExtensionData)
             },
             {
               initialCallback: true,

@@ -6,15 +6,16 @@ export const registerQuickAction: ZettelExtensions.Helper<
   'api' | 'pagePanel',
   [
     {
-      setPageExtensionData: (pageExtensionData: PageExtensionData) => Promise<void>
+      clearPageExtensionData: () => Promise<void>
       signIn: () => Promise<void>
     }
   ],
   {
     initializeQuickAction: (switchChecked: boolean) => void
     setQuickActionDisabled: (disabled: boolean) => void
-  }
-> = function ({ api, pagePanelApi }, { setPageExtensionData, signIn }) {
+  },
+  PageExtensionData
+> = function ({ api, pagePanelApi }, { clearPageExtensionData, signIn }) {
   const quickActionRegistration = this.register(
     pagePanelApi.registry.quickAction(() => ({
       title: api.header.name,
@@ -27,7 +28,7 @@ export const registerQuickAction: ZettelExtensions.Helper<
       },
       async onToggleSwitch(checked) {
         if (!checked) {
-          await setPageExtensionData(undefined)
+          await clearPageExtensionData()
         } else {
           await signIn()
         }

@@ -7,7 +7,7 @@ import { handleApiCallConnectionReset } from './handleApiCallConnectionReset'
 import { PageCredentialsStorage } from './PageCredentialsStorage'
 import { restApiClient } from './restApiClient'
 
-type Page = ZettelTypes.Extension.Entity.Page<PageExtensionData>
+type Page = ZettelTypes.Extension.Model.Page<PageExtensionData>
 
 const { documents } = docs('v1')
 const pageSynchronizationQueues: PartialRecord<Id, Page> = {}
@@ -83,7 +83,7 @@ export async function synchronizeToGoogleDocs(page: Page): Promise<void> {
       }
 
       async function updatePageExtensionDataDocument(updatedDocument: docs_v1.Schema$Document): Promise<void> {
-        const ccc = restApiClient.setPageExtensionData({
+        restApiClient.setPageExtensionData({
           pageId: synchronizingPage.id,
           data: {
             ...(synchronizingPage.extensionData as PageExtensionData.Activated),
@@ -97,7 +97,6 @@ export async function synchronizeToGoogleDocs(page: Page): Promise<void> {
 
       async function exportCardsToDocument(): Promise<void> {
         const requests: docs_v1.Schema$Request[] = []
-        let currentIndex = 1
         const totalContentEndIndex = document.body!.content![document.body!.content!.length - 1]!.endIndex! - 1
         if (totalContentEndIndex > 1) {
           requests.push({
@@ -121,300 +120,15 @@ export async function synchronizeToGoogleDocs(page: Page): Promise<void> {
                 text: '\n\n\n',
               },
             })
-            currentIndex += 3
           }
-          card.blocks.forEach(block => {
-            const blockStartIndex = currentIndex
-            switch (block.type) {
-              case ZettelTypes.Model.Block.Type.Paragraph:
-                pushStyledText(block)
-                requests.push({
-                  deleteParagraphBullets: {
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                  },
-                })
-                requests.push({
-                  updateParagraphStyle: {
-                    fields: '*',
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                    paragraphStyle: {
-                      namedStyleType: 'NORMAL_TEXT',
-                    },
-                  },
-                })
-                break
-
-              case ZettelTypes.Model.Block.Type.Header:
-                pushStyledText(block)
-                requests.push({
-                  deleteParagraphBullets: {
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                  },
-                })
-                requests.push({
-                  updateParagraphStyle: {
-                    fields: '*',
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                    paragraphStyle: {
-                      namedStyleType:
-                        block.level === 1
-                          ? 'HEADING_1'
-                          : block.level === 2
-                          ? 'HEADING_2'
-                          : block.level === 3
-                          ? 'HEADING_3'
-                          : block.level === 4
-                          ? 'HEADING_4'
-                          : block.level === 5
-                          ? 'HEADING_5'
-                          : block.level === 6
-                          ? 'HEADING_6'
-                          : '',
-                    },
-                  },
-                })
-                break
-
-              case ZettelTypes.Model.Block.Type.Quote:
-                pushStyledText(block, 1)
-                requests.push({
-                  deleteParagraphBullets: {
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                  },
-                })
-                requests.push({
-                  updateParagraphStyle: {
-                    fields: '*',
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                    paragraphStyle: {
-                      namedStyleType: 'SUBTITLE',
-                      spaceAbove: { magnitude: 5, unit: 'PT' },
-                      spaceBelow: { magnitude: 5, unit: 'PT' },
-                      borderRight: {
-                        color: { color: { rgbColor: { blue: 0.2 } } },
-                        dashStyle: 'DOT',
-                        padding: { magnitude: 10, unit: 'PT' },
-                        width: { magnitude: 2, unit: 'PT' },
-                      },
-                      borderLeft: {
-                        color: { color: { rgbColor: { blue: 0.2 } } },
-                        dashStyle: 'DOT',
-                        padding: { magnitude: 10, unit: 'PT' },
-                        width: { magnitude: 2, unit: 'PT' },
-                      },
-                    },
-                  },
-                })
-                break
-
-              case ZettelTypes.Model.Block.Type.Code:
-                requests.push({
-                  insertText: {
-                    endOfSegmentLocation: {},
-                    text: block.text,
-                  },
-                })
-                currentIndex += block.text.length
-                requests.push({
-                  deleteParagraphBullets: {
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                  },
-                })
-                requests.push({
-                  updateParagraphStyle: {
-                    fields: '*',
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                    paragraphStyle: {
-                      namedStyleType: 'SUBTITLE',
-                      spaceAbove: { magnitude: 3, unit: 'PT' },
-                      spaceBelow: { magnitude: 3, unit: 'PT' },
-                      borderTop: {
-                        color: { color: { rgbColor: { blue: 0.2 } } },
-                        dashStyle: 'SOLID',
-                        padding: { magnitude: 3, unit: 'PT' },
-                        width: { magnitude: 1, unit: 'PT' },
-                      },
-                      borderRight: {
-                        color: { color: { rgbColor: { blue: 0.2 } } },
-                        dashStyle: 'SOLID',
-                        padding: { magnitude: 3, unit: 'PT' },
-                        width: { magnitude: 1, unit: 'PT' },
-                      },
-                      borderBottom: {
-                        color: { color: { rgbColor: { blue: 0.2 } } },
-                        dashStyle: 'SOLID',
-                        padding: { magnitude: 3, unit: 'PT' },
-                        width: { magnitude: 1, unit: 'PT' },
-                      },
-                      borderLeft: {
-                        color: { color: { rgbColor: { blue: 0.2 } } },
-                        dashStyle: 'SOLID',
-                        padding: { magnitude: 3, unit: 'PT' },
-                        width: { magnitude: 1, unit: 'PT' },
-                      },
-                    },
-                  },
-                })
-                break
-
-              case ZettelTypes.Model.Block.Type.ListItem:
-                pushStyledText(block)
-                requests.push({
-                  deleteParagraphBullets: {
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                  },
-                })
-                requests.push({
-                  createParagraphBullets: {
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                    bulletPreset: block.ordered ? 'NUMBERED_DECIMAL_ALPHA_ROMAN' : 'BULLET_DISC_CIRCLE_SQUARE',
-                  },
-                })
-                requests.push({
-                  updateParagraphStyle: {
-                    fields: '*',
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                    paragraphStyle: {
-                      namedStyleType: 'NORMAL_TEXT',
-                    },
-                  },
-                })
-                break
-
-              case ZettelTypes.Model.Block.Type.Task:
-                pushStyledText(block)
-                requests.push({
-                  deleteParagraphBullets: {
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                  },
-                })
-                requests.push({
-                  createParagraphBullets: {
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                    bulletPreset: 'BULLET_CHECKBOX',
-                  },
-                })
-                requests.push({
-                  updateParagraphStyle: {
-                    fields: '*',
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                    paragraphStyle: {
-                      namedStyleType: 'NORMAL_TEXT',
-                    },
-                  },
-                })
-                break
-
-              case ZettelTypes.Model.Block.Type.Attachment:
-                // TODO: Implement images
-                //  block.files
-                //    .filter(file => file.mimeType.startsWith('image/'))
-                //    .forEach(file => {
-                //      requests.push({
-                //        insertInlineImage: {
-                //          endOfSegmentLocation: {},
-                //          uri: file.id,
-                //        },
-                //      })
-                //      currentIndex += 1
-                //    })
-                requests.push({
-                  deleteParagraphBullets: {
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                  },
-                })
-                requests.push({
-                  updateParagraphStyle: {
-                    fields: '*',
-                    range: { startIndex: blockStartIndex, endIndex: currentIndex },
-                    paragraphStyle: {
-                      namedStyleType: 'NORMAL_TEXT',
-                    },
-                  },
-                })
-                break
-            }
+          if (card.text) {
             requests.push({
               insertText: {
                 endOfSegmentLocation: {},
-                text: '\n',
+                text: card.text,
               },
             })
-            currentIndex += 1
-
-            function pushStyledText(styledText: ZettelTypes.Model.Block.StyledText, indentation = 0): void {
-              void [
-                {
-                  start: 0,
-                  end: styledText.annotations[0]?.from ?? styledText.text.length,
-                  annotation: undefined,
-                },
-                ...styledText.annotations.flatMap((annotation, annotationIndex) => [
-                  {
-                    start: annotation.from,
-                    end: annotation.to,
-                    annotation,
-                  },
-                  {
-                    start: annotation.to,
-                    end: styledText.annotations[annotationIndex + 1]?.from ?? styledText.text.length,
-                    annotation: undefined,
-                  },
-                ]),
-              ]
-                .filter(annotationRange => annotationRange.start !== annotationRange.end)
-                .forEach(annotationRange => {
-                  // TODO: Also apply inline styles
-                  if (!annotationRange.annotation) {
-                    requests.push({
-                      insertText: {
-                        endOfSegmentLocation: {},
-                        text: styledText.text.slice(annotationRange.start, annotationRange.end),
-                      },
-                    })
-                    currentIndex += annotationRange.end - annotationRange.start
-                  } else {
-                    switch (annotationRange.annotation.type) {
-                      case ZettelTypes.Model.Block.StyledText.Annotation.Type.HyperLink:
-                      case ZettelTypes.Model.Block.StyledText.Annotation.Type.PlainLink:
-                        // TODO: Distinguish inline images and bookmark links
-                        requests.push({
-                          insertText: {
-                            endOfSegmentLocation: {},
-                            text: styledText.text.slice(annotationRange.start, annotationRange.end),
-                          },
-                        })
-                        requests.push({
-                          updateTextStyle: {
-                            fields: 'link',
-                            range: {
-                              startIndex: currentIndex,
-                              endIndex: currentIndex + annotationRange.end - annotationRange.start,
-                            },
-                            textStyle: {
-                              link: { url: annotationRange.annotation.url },
-                            },
-                          },
-                        })
-                        currentIndex += annotationRange.end - annotationRange.start
-                        break
-
-                      case ZettelTypes.Model.Block.StyledText.Annotation.Type.ReferencedUser:
-                        // TODO: Not implemented
-                        break
-
-                      case ZettelTypes.Model.Block.StyledText.Annotation.Type.ReferencedPage:
-                        // TODO: Not implemented
-                        break
-
-                      case ZettelTypes.Model.Block.StyledText.Annotation.Type.ReferencedCard:
-                        // TODO: Not implemented
-                        break
-                    }
-                  }
-                })
-            }
-          })
+          }
         })
         if (requests.length > 0) {
           await documents.batchUpdate({

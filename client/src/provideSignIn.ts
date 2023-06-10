@@ -1,5 +1,6 @@
 import { ZettelExtensions } from '@zettelooo/extension-api'
 import { SERVER_BASE_URL } from './constants'
+import { PageExtensionData } from 'shared'
 
 export const provideSignIn: ZettelExtensions.Helper<
   'pagePanel',
@@ -12,7 +13,8 @@ export const provideSignIn: ZettelExtensions.Helper<
   ],
   {
     signIn: () => Promise<void>
-  }
+  },
+  PageExtensionData
 > = function ({ api, activatedApi, pagePanelApi }, { onRequestStart, onRequestEnd }) {
   let signInPromise:
     | {

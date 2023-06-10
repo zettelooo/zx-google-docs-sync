@@ -15,8 +15,8 @@ export function connectWsApi(): ZettelServices.Extension.Ws.GetUpdates<PageExten
         case 'page': {
           // TODO: Also clean pageCredentials database accordingly
           if (mutation.newPage.isDeleted) break
-          const newPageExtensionData = mutation.newPage.extensionData as PageExtensionData
-          const oldPageExtensionData = mutation.oldPage?.extensionData as PageExtensionData | undefined
+          const newPageExtensionData = mutation.newPage.extensionData
+          const oldPageExtensionData = mutation.oldPage?.extensionData
           if (
             !newPageExtensionData?.enabled &&
             newPageExtensionData?.signedInEmail &&
